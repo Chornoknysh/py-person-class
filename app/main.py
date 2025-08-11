@@ -12,19 +12,16 @@ class Person:
 
 def create_person_list(people: list[dict]) -> list[Person]:
     Person.people.clear()
-    instances: list[Person] = []
 
-    for data in people:
-        person = Person(name=data["name"], age=data["age"])
-        instances.append(person)
+    instances = [Person(name=d["name"], age=d["age"]) for d in people]
 
-    for data in people:
-        current = Person.people[data["name"]]
-
-        if "wife" in data and data["wife"] is not None:
-            current.wife = Person.people[data["wife"]]
-
-        if "husband" in data and data["husband"] is not None:
-            current.husband = Person.people[data["husband"]]
+    for d in people:
+        current = Person.people[d["name"]]
+        wife_name = d.get("wife")
+        if wife_name:
+            current.wife = Person.people[wife_name]
+        husband_name = d.get("husband")
+        if husband_name:
+            current.husband = Person.people[husband_name]
 
     return instances
